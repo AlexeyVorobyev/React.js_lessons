@@ -1,3 +1,4 @@
+import React from 'react';
 import './index.scss';
 
 const questions = [
@@ -22,39 +23,55 @@ const questions = [
   },
 ];
 
-function Result() {
-  return (
-    <div className="result">
-      <img src="https://cdn-icons-png.flaticon.com/512/2278/2278992.png" />
-      <h2>Вы отгадали 3 ответа из 10</h2>
-      <button>Попробовать снова</button>
-    </div>
-  );
+function Result({setStep,result,setResult}) {
+
+    function ResultButtonHandler() {
+        setResult(0);
+        setStep(0);
+    }
+
+    return (
+        <div className="result">
+            <img src="https://cdn-icons-png.flaticon.com/512/2278/2278992.png" />
+            <h2>Вы отгадали {result} ответа из {questions.length}</h2>
+            <button onClick={() => ResultButtonHandler()}>Попробовать снова</button>
+        </div>
+    );
 }
 
-function Game() {
-  return (
-    <>
-      <div className="progress">
-        <div style={{ width: '50%' }} className="progress__inner"></div>
-      </div>
-      <h1>Что такое useState?</h1>
-      <ul>
-        <li>Это функция для хранения данных компонента</li>
-        <li>Это глобальный стейт</li>
-        <li>Это когда на ты никому не нужен</li>
-      </ul>
-    </>
-  );
+function Game({question,step,setStep,result,setResult}) {
+
+    function CheckAnswer(index) {
+        if (question.correct === index) setResult(result + 1)
+        setStep(step + 1);
+    }
+
+    return (
+        <>
+            <div className="progress">
+                <div style={{ width: '50%' }} className="progress__inner"></div>
+            </div>
+            <h1>{question.title}</h1>
+            <ul>
+            {
+                question.variants.map((text,index) => (
+                    <li onClick={() => CheckAnswer(index)}>{text}</li>
+                )) 
+            }
+            </ul>
+        </>
+    );
 }
 
 function App() {
-  return (
-    <div className="App">
-      <Game />
-      {/* <Result /> */}
-    </div>
-  );
+    const [step,setStep] = React.useState(0);
+    const [result,setResult] = React.useState(0);
+    return (
+        <div className="App">
+        {step < questions.length && <Game question = {questions[step]} step = {step} setStep = {setStep} result ={result} setResult = {setResult}/>}
+        {step >= questions.length && <Result setStep = {setStep} result ={result} setResult = {setResult}/> }
+        </div>
+    );
 }
 
 export default App;
