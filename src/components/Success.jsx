@@ -1,12 +1,12 @@
 import React from 'react';
 
-export const Success = ({ count }) => {
+export const Success = ({ setSend, invitesLength, setInvites }) => {
   return (
     <div class="success-block">
       <img src="/assets/success.svg" alt="Success" />
       <h3>Успешно!</h3>
-      <p>Всем {count} пользователям отправлено приглашение.</p>
-      <button className="send-invite-btn">Назад</button>
+      <p>Всем {invitesLength} пользователям отправлено приглашение.</p>
+      <button className="send-invite-btn" onClick={() => {setSend(false); setInvites([])}}>Назад</button>
     </div>
   );
 };
